@@ -1,9 +1,9 @@
 import CalTrack_api
 
 diet = {"calories": 0.0, "protein": 0.0, "fat": 0.0, "carbs": 0.0 }
-
 def main():
-    while 1 == 1:
+    running = True
+    while running:
 
         meal = input("What did you eat?\n")
         # get nutrition data from API
@@ -21,7 +21,7 @@ def main():
 
 
             print(f"would you like to log this? Y/N")
-            if input() == 'Y':
+            if input().lower() == 'y':
                 for food in nutrition_data["foods"]:
                     diet["calories"] += food["nf_calories"]
                     diet["protein"] += food["nf_protein"]
@@ -29,7 +29,9 @@ def main():
                     diet["carbs"] += food["nf_total_carbohydrate"]
             print("Current stats for the day: \n")
             print_diet()
-
+        if input("would you like to add something else? Y/N\n").lower() == 'n':
+            running = False
+    print("Thank you for using CalTrack!")
 def print_diet():
     for macro in diet:
         print(f'{macro}:  {diet[macro]}')
