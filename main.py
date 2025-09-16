@@ -34,6 +34,7 @@ def main():
     print("Thank you for using CalTrack!")
 def print_diet():
     for macro in diet:
-        print(f'{macro}:  {diet[macro]}')
+        print(f'{macro}:  {round(diet[macro], 2)}')
+
 if __name__ == '__main__':
     main()

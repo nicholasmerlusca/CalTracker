@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c13e127a-0c91-4f32-bfb0-cf7cb8efd0b7" name="Changes" comment="added basic calorie and macronutrient tracking">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="c13e127a-0c91-4f32-bfb0-cf7cb8efd0b7" name="Changes" comment="users can now exit cleanly, and removed case sensitive input for Y/N inputs">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +75,7 @@
       <updated>1757992695857</updated>
       <workItem from="1757992697223" duration="2525000" />
       <workItem from="1758045266769" duration="2215000" />
-      <workItem from="1758064079137" duration="335000" />
+      <workItem from="1758064079137" duration="572000" />
     </task>
     <task id="LOCAL-00001" summary="created project">
       <option name="closed" value="true" />
@@ -102,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758048490754</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="users can now exit cleanly, and removed case sensitive input for Y/N inputs">
+      <option name="closed" value="true" />
+      <created>1758064615302</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1758064615302</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,10 +130,11 @@
     <MESSAGE value="created project" />
     <MESSAGE value="added basic input output with Nutritionix API" />
     <MESSAGE value="added basic calorie and macronutrient tracking" />
-    <option name="LAST_COMMIT_MESSAGE" value="added basic calorie and macronutrient tracking" />
+    <MESSAGE value="users can now exit cleanly, and removed case sensitive input for Y/N inputs" />
+    <option name="LAST_COMMIT_MESSAGE" value="users can now exit cleanly, and removed case sensitive input for Y/N inputs" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CalTracker$main.coverage" NAME="main Coverage Results" MODIFIED="1758064376062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CalTracker$main.coverage" NAME="main Coverage Results" MODIFIED="1758064417910" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CalTracker$CalTrack_api.coverage" NAME="CalTrack_api Coverage Results" MODIFIED="1758047650852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
