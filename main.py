@@ -8,7 +8,9 @@ def main():
     # create or fetch diet dictionary
     diet = {'date': today, "calories": 0.0, "protein": 0.0, "fat": 0.0, "carbs": 0.0}
     if os.path.exists('diet_history.csv'):
-        get_daily_diet()
+        temp_diet = get_daily_diet()
+        if temp_diet is not None:
+            diet = temp_diet
     # loop for continuous prompting
     running = True
     while running:
@@ -53,13 +55,16 @@ def print_diet(diet):
 
 def get_daily_diet():
     with open('diet_history.csv', 'r', newline= '') as csvfile:
+        csvfile.readline()
         for row in csv.reader(csvfile):
             if row[0] == today:
-                diet = {'date': today, "calories": row[1], "protein": row[2], "fat": row[3], "carbs": row[4]}
+                return {'date': today, "calories": float(row[1]), "protein": float(row[2]), "fat": float(row[3]),
+                        "carbs": float(row[4])}
     return None
 
 def update_history(diet):
     data = []
+    diet_list = [diet['date'], diet['calories'], diet['protein'], diet['fat'], diet['carbs']]
     if os.path.exists('diet_history.csv'):
             with open('diet_history.csv', 'r', newline='') as csvfile:
                 reader = csv.reader(csvfile)
@@ -67,17 +72,18 @@ def update_history(diet):
                     data.append(row)
             for i in range(len(data)):
                 if data[i][0] == today:
-                    data[i] = [diet['date'], diet['calories'], diet['protein'], diet['fat'], diet['carbs']]
+                    data[i] = diet_list
                     break
-                else:
-                    data.append(diet)
+            else:
+                data.append(diet_list)
             with open('diet_history.csv', 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerows(data)
     else:
         with open('diet_history.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow([diet['date'], diet['calories'], diet['protein'], diet['fat'], diet['carbs']])
+            writer.writerow(['date', 'calories', 'protein', 'fat', 'carbs'])
+            writer.writerow(diet_list)
 
 
 if __name__ == '__main__':

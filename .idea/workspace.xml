@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c13e127a-0c91-4f32-bfb0-cf7cb8efd0b7" name="Changes" comment="all numbers are now rounded to the second d ecimal.">
+    <list default="true" id="c13e127a-0c91-4f32-bfb0-cf7cb8efd0b7" name="Changes" comment="implemented retention via csv files.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -76,7 +76,7 @@
       <updated>1757992695857</updated>
       <workItem from="1757992697223" duration="2525000" />
       <workItem from="1758045266769" duration="2215000" />
-      <workItem from="1758064079137" duration="4417000" />
+      <workItem from="1758064079137" duration="6195000" />
     </task>
     <task id="LOCAL-00001" summary="created project">
       <option name="closed" value="true" />
@@ -118,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758064762395</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="implemented retention via csv files.">
+      <option name="closed" value="true" />
+      <created>1758070174387</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758070174387</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,10 +149,11 @@
     <MESSAGE value="added basic calorie and macronutrient tracking" />
     <MESSAGE value="users can now exit cleanly, and removed case sensitive input for Y/N inputs" />
     <MESSAGE value="all numbers are now rounded to the second d ecimal." />
-    <option name="LAST_COMMIT_MESSAGE" value="all numbers are now rounded to the second d ecimal." />
+    <MESSAGE value="implemented retention via csv files." />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented retention via csv files." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CalTracker$main.coverage" NAME="main Coverage Results" MODIFIED="1758069835148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CalTracker$main.coverage" NAME="main Coverage Results" MODIFIED="1758071715094" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CalTracker$CalTrack_api.coverage" NAME="CalTrack_api Coverage Results" MODIFIED="1758047650852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
