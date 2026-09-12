@@ -4,16 +4,33 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-APP_ID = os.getenv("APP_ID")
+def get_nutrition(query: str, grams):
+    url = "https://api.nal.usda.gov/fdc/v1/foods/search"
+    data = {"query": query,
+            "api_key": API_KEY}
 
-def get_nutrition(query: str):
-    url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
-    headers = {"x-app-id": APP_ID, "x-app-key": API_KEY, "content-type": "application/json"}
-    data = {"query": query}
-
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.get(url, params=data)
     if response.status_code == 200:
-        return response.json()
+        list_foods = []
+        size = float(grams)/100
+        resp = response.json().get("foods", [])[0:10]
+        for food in resp:
+            list_foods.append({
+                "food_name": food.get("description"),
+                "nf_calories": food.get("foodNutrients", [])[3].get("value")*size if len(food.get("foodNutrients", [])) > 3 else None,
+                "nf_protein": food.get("foodNutrients", [])[0].get("value")*size if len(food.get("foodNutrients", [])) > 0 else None,
+                "nf_total_fat": food.get("foodNutrients", [])[1].get("value")*size if len(food.get("foodNutrients", [])) > 1 else None,
+                "nf_total_carbohydrate": food.get("foodNutrients", [])[2].get("value")*size if len(food.get("foodNutrients", [])) > 2 else None,
+                "nf_brand_name": food.get("brandName", "N/A")
+            })
+        return {"foods": list_foods}
+
+
+
     else:
         print("ERROR:", response.status_code, response.text)
         return None
+if __name__ == '__main__':
+    import json
+    result = get_nutrition("egg")
+    print(json.dumps(result, indent=2))

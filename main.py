@@ -1,90 +1,63 @@
 import CalTrack_api
 from datetime import date
-import csv
-import os
+import database
 # initialize date
 today = date.today().isoformat()
 def main():
-    # create or fetch diet dictionary
-    diet = {'date': today, "calories": 0.0, "protein": 0.0, "fat": 0.0, "carbs": 0.0}
-    if os.path.exists('diet_history.csv'):
-        temp_diet = get_daily_diet()
-        if temp_diet is not None:
-            diet = temp_diet
+    # create database
+    database.init_db()
     # loop for continuous prompting
     running = True
     while running:
 
         meal = input("What did you eat?\n")
         # get nutrition data from API
-        nutrition_data = CalTrack_api.get_nutrition(meal)
-
+        grams = input("How many grams?\n")
+        nutrition_data = CalTrack_api.get_nutrition(meal, grams)
         if nutrition_data:
+            i = 1
             print("\n nutrition info:")
             for food in nutrition_data["foods"]:
-                print(f"- {food['food_name'].title()}: "
-                      f"{food['nf_calories']} kcal | "
-                      f"P: {food['nf_protein']}g | "
-                      f"C: {food['nf_total_carbohydrate']}g | "
-                      f"F: {food['nf_total_fat']}g")
+                if food['nf_brand_name'] != "N/A":
+                    print(f"{i} - {food['food_name'].title()} ({food['nf_brand_name']}): "
+                          f"{food['nf_calories']} kcal | "
+                          f"P: {food['nf_protein']}g | "
+                          f"C: {food['nf_total_carbohydrate']}g | "
+                          f"F: {food['nf_total_fat']}g")
+                else:
+                    print(f"{i} - {food['food_name'].title()}: "
+                          f"{food['nf_calories']} kcal | "
+                          f"P: {food['nf_protein']}g | "
+                          f"C: {food['nf_total_carbohydrate']}g | "
+                          f"F: {food['nf_total_fat']}g")
+                i += 1
 
-
+            print(f"select listed item (by number 1-10)")
+            selection = int(input())
+            if 1 <= selection <= len(nutrition_data["foods"]):
+                selected_food = nutrition_data["foods"][selection - 1]
+                print(f"You selected: {selected_food['food_name'].title()} ({selected_food['nf_brand_name']})")
+            else:
+                print("Invalid selection. Please try again.")
+                continue
             print(f"would you like to log this? Y/N")
             if input().lower() == 'y':
                 # update diet with each macro
-                for food in nutrition_data["foods"]:
-                    diet["calories"] += food["nf_calories"]
-                    diet["protein"] += food["nf_protein"]
-                    diet["fat"] += food["nf_total_fat"]
-                    diet["carbs"] += food["nf_total_carbohydrate"]
+                database.insert_item(selected_food["nf_calories"], selected_food["nf_protein"], selected_food["nf_total_fat"],
+                                     selected_food["nf_total_carbohydrate"], selected_food["food_name"], today)
             print("Current stats for the day: \n")
-            print_diet(diet)
+            print_totals()
         if input("would you like to add something else? Y/N\n").lower() == 'n':
             running = False
-    print("saving diet...")
-    update_history(diet)
     print("Thank you for using CalTrack!")
 
-
-def print_diet(diet):
-    for macro in diet:
-        if macro == 'date':
-            print(f'{macro}:  {(diet[macro])}')
-        else:
-            print(f'{macro}: {round(diet[macro], 2)}')
-
-def get_daily_diet():
-    with open('diet_history.csv', 'r', newline= '') as csvfile:
-        csvfile.readline()
-        for row in csv.reader(csvfile):
-            if row[0] == today:
-                return {'date': today, "calories": float(row[1]), "protein": float(row[2]), "fat": float(row[3]),
-                        "carbs": float(row[4])}
-    return None
-
-def update_history(diet):
-    data = []
-    diet_list = [diet['date'], diet['calories'], diet['protein'], diet['fat'], diet['carbs']]
-    if os.path.exists('diet_history.csv'):
-            with open('diet_history.csv', 'r', newline='') as csvfile:
-                reader = csv.reader(csvfile)
-                for row in reader:
-                    data.append(row)
-            for i in range(len(data)):
-                if data[i][0] == today:
-                    data[i] = diet_list
-                    break
-            else:
-                data.append(diet_list)
-            with open('diet_history.csv', 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerows(data)
-    else:
-        with open('diet_history.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(['date', 'calories', 'protein', 'fat', 'carbs'])
-            writer.writerow(diet_list)
-
+def print_totals():
+    totals = database.get_daily_totals(today)
+    print(f"Today's totals: \n"
+          f"Calories: {round(totals['total_calories'], 1)} kcal\n"
+          f"Protein: {round(totals['total_protein'], 1)} g\n"
+          f"Fat: {round(totals['total_fat'], 1)} g\n"
+          f"Carbs: {round(totals['total_carbs'], 1)} g\n")
 
 if __name__ == '__main__':
     main()
