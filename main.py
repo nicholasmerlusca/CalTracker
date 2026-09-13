@@ -12,9 +12,9 @@ def main():
 
         meal = input("What did you eat?\n")
         # get nutrition data from API
-        grams = input("How many grams?\n")
+        grams = input("How many grams/ml?\n")
         nutrition_data = CalTrack_api.get_nutrition(meal, grams)
-        if nutrition_data:
+        if nutrition_data["foods"]:
             i = 1
             print("\n nutrition info:")
             for food in nutrition_data["foods"]:
@@ -32,7 +32,7 @@ def main():
                           f"F: {food['nf_total_fat']}g")
                 i += 1
 
-            print(f"select listed item (by number 1-10)")
+            print(f"select listed item (by number 1-{len(nutrition_data['foods'])})")
             selection = int(input())
             if 1 <= selection <= len(nutrition_data["foods"]):
                 selected_food = nutrition_data["foods"][selection - 1]
@@ -47,6 +47,8 @@ def main():
                                      selected_food["nf_total_carbohydrate"], selected_food["food_name"], today)
             print("Current stats for the day: \n")
             print_totals()
+        else:
+            print("No nutrition data found for the given food item.")
         if input("would you like to add something else? Y/N\n").lower() == 'n':
             running = False
     print("Thank you for using CalTrack!")
