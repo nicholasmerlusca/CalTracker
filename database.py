@@ -1,4 +1,9 @@
 import sqlite3
+from datetime import datetime
+
+
+from datetime import date
+
 DB_PATH = 'caltrack.db'
 
 def get_db():
@@ -55,3 +60,4 @@ def get_daily_totals(date):
 
 if __name__ == '__main__':
     init_db()
+    print(dict(get_daily_totals(date.today().isoformat())))
