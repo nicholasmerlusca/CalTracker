@@ -1,60 +1,605 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CalTrack</title>
+
     <style>
-    .hidden {
-        display: none;
-    }
-    .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    background: white;
-    padding: 20px;
-    border: 1px solid black;
+        * {
+            box-sizing: border-box;
+        }
+        .macro-legend {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+    font-size: 14px;
 }
-    #modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 
-    background: rgba(0, 0, 0, 0.5);
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
-    .selected {
-        background: lightblue;
-    }
-</style>
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.protein-color {
+    background: green;
+}
+
+.fat-color {
+    background: red;
+}
+
+.carbs-color {
+    background: blue;
+}
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header span {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 25px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .calorie-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 370px;
+        }
+
+        #macro-chart {
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #macro-hole {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: white;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #macro-hole p {
+            margin: 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #calCirc {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 3px;
+        }
+
+        .chart-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .macro-box {
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .macro-label {
+            display: block;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .macro-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #open-search {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #open-search:hover {
+            background: #1d4ed8;
+        }
+
+        #food-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #food-list button {
+            width: 100%;
+            padding: 15px;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+
+            background: #f9fafb;
+            color: #1f2937;
+
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        #food-list button:hover {
+            background: #f0f4f8;
+        }
+
+        .selected {
+            background: #dbeafe !important;
+        }
+
+        #modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 10;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: min(500px, calc(100% - 40px));
+
+            background: white;
+            padding: 30px;
+
+            border-radius: 16px;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+            z-index: 20;
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        form label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        form input {
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        form button {
+            margin-top: 10px;
+            padding: 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #2563eb;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            max-height: 300px;
+            overflow-y: auto;
+
+            margin-top: 20px;
+        }
+
+        #search-results button {
+            padding: 12px;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+
+            background: #f9fafb;
+
+            text-align: left;
+            cursor: pointer;
+        }
+
+        #search-results button:hover {
+            background: #f0f4f8;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #log-food {
+            background: #16a34a;
+            color: white;
+        }
+
+        #log-food:hover {
+            background: #15803d;
+        }
+
+        #close-search,
+        #close-food {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        #remove-food {
+            background: #dc2626;
+            color: white;
+        }
+
+        #remove-food:hover {
+            background: #b91c1c;
+        }
+
+        .food-detail {
+            display: flex;
+            justify-content: space-between;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .food-detail:last-child {
+            border-bottom: none;
+        }
+
+        .food-detail span:first-child {
+            color: #6b7280;
+        }
+
+        .food-detail span:last-child {
+            font-weight: bold;
+        }
+
+        #status {
+            margin-top: 15px;
+            text-align: center;
+            color: #16a34a;
+            font-size: 14px;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                padding: 18px 20px;
+            }
+
+            main {
+                margin: 25px auto;
+                padding: 0 15px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calorie-card {
+                min-height: 320px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Welcome, {{ name }}!</h1>
-<button id="open-search">Search Food</button>
 <div id="modal-backdrop" class="hidden"></div>
+
+<header>
+    <h1>CalTrack</h1>
+</header>
+
+<main>
+
+    <div class="dashboard-grid">
+
+
+        <div class="card calorie-card">
+
+            <h2>Today's Calories</h2>
+
+           <div id="macro-chart">
+    <div id="macro-hole">
+        <p>
+            <span id="calCirc"></span>
+            <span class="chart-label">kcal</span>
+        </p>
+    </div>
+</div>
+
+<div class="macro-legend">
+    <div class="legend-item">
+        <span class="legend-color protein-color"></span>
+        Protein
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-color fat-color"></span>
+        Fat
+    </div>
+
+    <div class="legend-item">
+        <span class="legend-color carbs-color"></span>
+        Carbs
+    </div>
+</div>
+
+            <button id="open-search">
+                + Add Food
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Today's Macros</h2>
+
+            <div class="macro-grid">
+
+                <div class="macro-box">
+                    <span class="macro-label">Calories</span>
+                    <span class="macro-value">
+                        <span id="calories"></span>
+                    </span>
+                </div>
+
+                <div class="macro-box">
+                    <span class="macro-label">Protein</span>
+                    <span class="macro-value">
+                        <span id="protein"></span>g
+                    </span>
+                </div>
+
+                <div class="macro-box">
+                    <span class="macro-label">Fat</span>
+                    <span class="macro-value">
+                        <span id="fat"></span>g
+                    </span>
+                </div>
+
+                <div class="macro-box">
+                    <span class="macro-label">Carbs</span>
+                    <span class="macro-value">
+                        <span id="carbs"></span>g
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card" style="margin-top: 25px;">
+
+        <h2>Today's Food</h2>
+
+        <div id="food-list"></div>
+
+        <div id="status"></div>
+
+    </div>
+
+</main>
+
 <div id="search-modal" class="modal hidden">
-    <h2>Search Food</h2>
+
+    <h2>Add Food</h2>
 
     <form name="search" method="POST" action="/search">
-    What did you eat today? <input type="text" name="food">
-    How many Grams/Ml? <input type="text" name="amount">
-    <button type="submit" value="search" name="action">
-        submit
-    </button>
-</form>
+
+        <label for="food">Food</label>
+        <input
+            type="text"
+            id="food"
+            name="food"
+            placeholder="e.g. chicken breast"
+        >
+
+        <label for="amount">Amount (grams/ml)</label>
+        <input
+            type="number"
+            id="amount"
+            name="amount"
+            placeholder="e.g. 150"
+        >
+
+        <button type="submit" value="search" name="action">
+            Search
+        </button>
+
+    </form>
+
 
     <div id="search-results"></div>
 
-    <button id="close-search">Close</button>
-    <button id="log-food">
-        Log Food
-    </button>
+
+    <div class="modal-actions">
+
+        <button id="close-search">
+            Close
+        </button>
+
+        <button id="log-food">
+            Log Food
+        </button>
+
+    </div>
+
 </div>
 
-<div id="status"></div>
+
+<div id="food-modal" class="modal hidden">
+
+    <h2 id="food-name"></h2>
+
+    <div class="food-detail">
+        <span>Calories</span>
+        <span><span id="food-calories"></span> kcal</span>
+    </div>
+
+    <div class="food-detail">
+        <span>Protein</span>
+        <span><span id="food-protein"></span> g</span>
+    </div>
+
+    <div class="food-detail">
+        <span>Fat</span>
+        <span><span id="food-fat"></span> g</span>
+    </div>
+
+    <div class="food-detail">
+        <span>Carbs</span>
+        <span><span id="food-carbs"></span> g</span>
+    </div>
+
+
+    <div class="modal-actions">
+
+        <button id="close-food">
+            Close
+        </button>
+
+        <button id="remove-food">
+            Remove
+        </button>
+
+    </div>
+
+</div>
+
 
 <script src="/static/script.js"></script>
+
 </body>
 </html>

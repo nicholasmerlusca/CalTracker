@@ -58,6 +58,16 @@ def get_daily_totals(date):
     con.close()
     return totals
 
+def remove_item(id):
+    con = get_db()
+    con.execute('''
+    DELETE FROM diet_history
+    WHERE id = ?
+    ''', (id,))
+    con.commit()
+    con.close()
+    return
+
 if __name__ == '__main__':
     init_db()
     print(dict(get_daily_totals(date.today().isoformat())))
